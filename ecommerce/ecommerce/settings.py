@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from google.oauth2 import service_account
 import dotenv
 import os
 
@@ -44,7 +45,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_filters',
-    'product.apps.ProductConfig'
+    'product.apps.ProductConfig',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -132,6 +134,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Google Cloud Storage settings
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, '/Users/nvcdev02/Desktop/ecommerce/ecommerce_backend/ecommerce/service-account-file.json')
+)
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# MEDIA_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage' 
+
+GS_BUCKET_NAME = os.environ.get('GS_BUCKET_NAME')
+# GS_PROJECT_ID = os.environ.get('GS_PROJECT_ID')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
