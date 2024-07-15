@@ -3,7 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .models import Product
-from .serializers import ProductSerializer
+from .models import ProductImages
+from .serializers import *
 from .filters import ProductsFilter
 
 
@@ -30,4 +31,17 @@ def get_product(request,pk):
     product = get_object_or_404(Product,id=pk)
     serializer = ProductSerializer(product,many=False)
     return Response({"product":serializer.data})
+
+@api_view(['POST'])
+def upload_product_images(request):
+    data = request.data
+    files = request.FILES.getlist('images')
+    images = []
+    for f in files:
+        image = ProductImages.objects.create(product = Product(data['product']),image = f)
+        images.append(image)
+
+        serializer = ProductImagesSerializer(images,many=True)
+
+    return Response(serializer.data)
 
