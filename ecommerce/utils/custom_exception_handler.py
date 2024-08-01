@@ -14,21 +14,15 @@ def custom_exception_handler(exc,context):
                 "details":[]
             }
         }
-
         error = error_payload["error"]
         status_code = response.status_code
-
         error["status_code"] = status_code
         error["message"] = http_code_to_message[status_code]
         error["details"] = response.data
-
         response.data = error_payload
-
         return response
-    
     # else:
     #     error = {
     #         "error":"Something went wrong"
     #     }
-
     #     return Response(error,status = status.HTTP_500_INTERNAL_SERVER_ERROR)
