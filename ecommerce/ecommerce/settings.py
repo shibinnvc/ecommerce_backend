@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
     'product.apps.ProductConfig',
     'account.apps.AccountConfig',
+    'order.apps.OrderConfig',
     'storages'
 ]
 
