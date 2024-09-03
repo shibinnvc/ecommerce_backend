@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view,permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Avg
@@ -59,7 +59,7 @@ def upload_product_images(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated,IsAdminUser])
 def update_product(request,pk):
     product = get_object_or_404(Product,id=pk)
     if product.user != request.user:
@@ -76,7 +76,7 @@ def update_product(request,pk):
     return Response({"product":serializer.data})
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated,IsAdminUser])
 def delete_product(request,pk):
     product = get_object_or_404(Product,id=pk)
     if product.user != request.user:

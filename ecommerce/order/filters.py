@@ -1,10 +1,10 @@
 from django_filters import rest_framework as filters
-from .models import Order
+from .models import KOrder
 
 class OrdersFilter(filters.FilterSet):
     class Meta:
-        model = Order
-        fields = ('id','status')
+        model = KOrder
+        fields = ('id','status','payment_status','payment_mode')
 
 
 
