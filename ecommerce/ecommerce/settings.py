@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'account.apps.AccountConfig',
     'order.apps.OrderConfig',
-    'storages'
+    'storages',
+    'corsheaders',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -166,8 +170,11 @@ GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
 )
 
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage' # for store images in Google Cloud Storage
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage' # for store images in system storage
 # MEDIA_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage' 
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
 
 GS_BUCKET_NAME = os.environ.get('GS_BUCKET_NAME')
 # GS_PROJECT_ID = os.environ.get('GS_PROJECT_ID')
@@ -177,3 +184,33 @@ GS_BUCKET_NAME = os.environ.get('GS_BUCKET_NAME')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "https://192.168.29.75:8000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTIONS',
+]
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-csrftoken',
+]
+
+ASGI_APPLICATION = 'yourproject.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}

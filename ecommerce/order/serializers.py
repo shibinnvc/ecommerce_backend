@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import KOrder,OrderItem
+from .models import Order,OrderItem
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,7 +12,7 @@ class OrderSerializer(serializers.ModelSerializer):
     # payment_mode = serializers.CharField(source='get_payment_mode_display')
     orderItems = serializers.SerializerMethodField(method_name='get_order_items',read_only=True)
     class Meta:
-        model = KOrder
+        model = Order
         fields = "__all__"
 
     def get_order_items(self, obj):

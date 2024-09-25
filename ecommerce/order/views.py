@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
-from .models import KOrder,OrderItem
+from .models import Order,OrderItem
 from product.models import Product
 from .serializers import OrderSerializer
 from .filters import OrdersFilter
@@ -15,7 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_orders(request):
-    filterset = OrdersFilter(request.GET, queryset=KOrder.objects.all().order_by('id'))
+    filterset = OrdersFilter(request.GET, queryset=Order.objects.all().order_by('id'))
     count = filterset.qs.count()
     # Pagination
     resPerPage = 3
@@ -35,7 +35,7 @@ def get_orders(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_order(request,pk):
-    order = get_object_or_404(KOrder,id=pk)
+    order = get_object_or_404(Order,id=pk)
     serializer = OrderSerializer(order,many = False)
     return Response({'order':serializer.data})
 
@@ -50,7 +50,7 @@ def new_order(request):
     else:
         # Create order
         total_amount = sum(item['price'] * item['quantity'] for item in order_items)
-        order = KOrder.objects.create(
+        order = Order.objects.create(
             user=user,
             street=data['street'],
             city=data['city'],
@@ -81,7 +81,7 @@ def new_order(request):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated,IsAdminUser])
 def process_order(request,pk):
-    order = get_object_or_404(KOrder,id=pk)
+    order = get_object_or_404(Order,id=pk)
     order.status = request.data['status']
     order.save()
     serializer = OrderSerializer(order,many = False)
@@ -90,7 +90,7 @@ def process_order(request,pk):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated,IsAdminUser])
 def delete_order(request,pk):
-    order = get_object_or_404(KOrder,id=pk)
+    order = get_object_or_404(Order,id=pk)
     order.delete()
     return Response({'details':'Order is deleted.'})
     

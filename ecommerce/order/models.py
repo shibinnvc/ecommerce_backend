@@ -18,7 +18,7 @@ class PaymentMode(TextChoices):
 class PaymentStatusxxx(TextChoices):
     PAID = 'PAID'
     UNPAID = 'UNPAID'
-class KOrder(models.Model):
+class Order(models.Model):
     street = models.CharField(max_length=500,default="",blank=False)
     city = models.CharField(max_length=100,default="",blank=False)
     state = models.CharField(max_length=100,default="",blank=False)
@@ -58,7 +58,7 @@ class KOrder(models.Model):
     
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL,null=True)
-    order = models.ForeignKey(KOrder, on_delete=models.CASCADE,null=True,related_name="orderitems")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE,null=True,related_name="orderitems")
     name = models.CharField(max_length=200,default="",blank=False)
     quantity = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=7,decimal_places=2,blank=False)
